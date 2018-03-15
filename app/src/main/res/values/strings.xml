@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">The Guardian News</string>
+    <string name="no_articles_found">No articles found</string>
+</resources>
