@@ -4,11 +4,16 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * URL for articles data from the Guardian API
      */
     private static final String GUARDIAN_URL_REQUEST =
-            "http://content.guardianapis.com/search?q=debates&api-key=test";
+            "https://content.guardianapis.com/search?api-key=test";
 
     /**
      * Constant value for the earthquake loader ID. We can choose any integer.
@@ -47,10 +52,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     private ProgressBar spinningProgress;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         /*
          * Check if device is connected to the internet
@@ -106,13 +113,58 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText("No internet connection");
         }
 
+    }
 
+    //this method initializes the contents of Activity's options menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu that specified in the XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    // this method check which item on options menu was selected and opens it via Intent
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
+        String orderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default));
+
+        String sections = sharedPrefs.getString(
+                getString(R.string.settings_sections_key),
+                getString(R.string.settings_sections_default));
+
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(GUARDIAN_URL_REQUEST);
+        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append query parameter and its value. For example, the `format=json`
+        uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("order-by", orderBy);
+
+        //check if any particular section is selected in order to sort articles
+        if (!(sections.equals("all"))) {
+            uriBuilder.appendQueryParameter("section", sections);
+        }
+
         // Create new loader for given URL
-        return new ArticleLoader(this, GUARDIAN_URL_REQUEST);
+        return new ArticleLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -135,4 +187,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<List<Article>> loader) {
         mAdapter.clear();
     }
+
 }
+
