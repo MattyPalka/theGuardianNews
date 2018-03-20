@@ -18,6 +18,9 @@ public class Article {
     // URL to the site with full article
     private String mArticleURL;
 
+    // Author of the Article
+    private String mArticleAuthor;
+
     /**
      * Create a new Article object
      *
@@ -25,12 +28,14 @@ public class Article {
      * @param articleTitle   is the title that the article have
      * @param articleDate    is the date the article was published
      * @param articleURL     is the URL to the site with the article
+     * @param articleAuthor  is the author of the article
      */
-    public Article(String articleSection, String articleTitle, String articleDate, String articleURL) {
+    public Article(String articleSection, String articleTitle, String articleDate, String articleURL, String articleAuthor) {
         mArticleSection = articleSection;
         mArticleTitle = articleTitle;
         mArticleDate = articleDate;
         mArticleURL = articleURL;
+        mArticleAuthor = articleAuthor;
     }
 
     // returns the section of the article
@@ -52,4 +57,6 @@ public class Article {
     public String getArticleURL() {
         return mArticleURL;
     }
+
+    public String getArticleAuthor() { return mArticleAuthor; }
 }

@@ -2,12 +2,9 @@ package com.apps.palka.matt.theguardiannews;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,11 +74,14 @@ public class QueryUtils {
                 JSONObject o = resultsJSON.getJSONObject(i);
 
                 String sectionName = o.getString("sectionName");
-                String webPublicationDate = o.getString("webPublicationDate");
-                String webTitle = o.getString("webTitle");
+                String articlePublicationDate = o.getString("webPublicationDate");
+                String articleTitle = o.getString("webTitle");
                 String webUrl = o.getString("webUrl");
+                JSONArray tagsArray = o.getJSONArray("tags");
+                JSONObject tag = tagsArray.getJSONObject(0);
+                String articleAuthor = tag.getString("webTitle");
 
-                articles.add(new Article(sectionName, webTitle, webPublicationDate, webUrl));
+                articles.add(new Article(sectionName, articleTitle, articlePublicationDate, webUrl, articleAuthor));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
@@ -108,6 +108,8 @@ public class QueryUtils {
      * Make an HTTP request to the given URL and return a String as the response.
      */
     private static String makeHttpRequest(URL url) throws IOException {
+
+        final int SERVER_RESPONSE_CODE_OK = 200;
         String jsonResponse = "";
 
         // If the URL is null, then return early.
@@ -126,7 +128,7 @@ public class QueryUtils {
 
             // If the request was successful (response code 200),
             // then read the input stream and parse the response.
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == SERVER_RESPONSE_CODE_OK) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {

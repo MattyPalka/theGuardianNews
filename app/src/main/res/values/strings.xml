@@ -41,5 +41,7 @@
     <!-- Label for sections Games option [CHAR LIMIT=20] -->
     <string name="settings_sections_games_label">Games</string>
     <string name="settings_sections_games_value" translatable="false">games</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="author">Author:</string>
 
 </resources>

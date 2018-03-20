@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 /**
@@ -46,16 +45,16 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         Article currentArticle = getItem(position);
 
         // Find the Text View in the list_item.xml with the ID section_text_view and set it's text
-        TextView sectionTextView = (TextView) listItemView.findViewById(R.id.section_text_view);
+        TextView sectionTextView = listItemView.findViewById(R.id.section_text_view);
         sectionTextView.setText(currentArticle.getArticleSection());
 
         // Find the Text View in the list_item.xml with the ID title_text_view and set it's text
-        TextView titleTextView = (TextView) listItemView.findViewById(R.id.title_text_view);
+        TextView titleTextView = listItemView.findViewById(R.id.title_text_view);
         titleTextView.setText(currentArticle.getArticleTitle());
 
         // Find the Text Views in the list_item.xml with the IDs date_text_view and time_text_view
-        TextView dateTextView = (TextView) listItemView.findViewById(R.id.date_text_view);
-        TextView timeTextView = (TextView) listItemView.findViewById(R.id.time_text_view);
+        TextView dateTextView = listItemView.findViewById(R.id.date_text_view);
+        TextView timeTextView = listItemView.findViewById(R.id.time_text_view);
 
         // Split the downloaded JSON time of article to DATE and TIME
         // desired format is YYYY-MM-DD for date and HH:MM:SS for time
@@ -66,7 +65,18 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         dateTextView.setText(parts[0]);
         timeTextView.setText(" at " + timeParts[0]);
 
-
+        //Find the Text View in the list_item.xml with the ID author_text_view and it's prefix (Text View
+        // containing word AUTHOR: with the ID author_text_container
+        TextView authorTextView = listItemView.findViewById(R.id.author_text_view);
+        TextView authorTextContainer = listItemView.findViewById(R.id.author_text_container);
+        // Check if there is an author of the article and Set the author name in the authorTextView
+        // if there is, or hide the authorTextContainer if there isn't
+        if (!(currentArticle.getArticleAuthor().isEmpty())){
+            authorTextView.setText(currentArticle.getArticleAuthor());
+        } else {
+            authorTextContainer.setVisibility(View.GONE);
+            authorTextView.setVisibility(View.GONE);
+        }
 
         return listItemView;
     }

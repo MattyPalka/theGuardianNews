@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * URL for articles data from the Guardian API
      */
     private static final String GUARDIAN_URL_REQUEST =
-            "https://content.guardianapis.com/search?api-key=test";
+            "https://content.guardianapis.com/search?api-key=test&show-tags=contributor";
 
     /**
      * Constant value for the earthquake loader ID. We can choose any integer.
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loaderManager.initLoader(ARTICLE_LOADER_ID, null, this);
         } else {
             spinningProgress.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("No internet connection");
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
 
     }
