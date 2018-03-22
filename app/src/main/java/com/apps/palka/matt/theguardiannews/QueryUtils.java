@@ -78,10 +78,16 @@ public class QueryUtils {
                 String articleTitle = o.getString("webTitle");
                 String webUrl = o.getString("webUrl");
                 JSONArray tagsArray = o.getJSONArray("tags");
-                JSONObject tag = tagsArray.getJSONObject(0);
-                String articleAuthor = tag.getString("webTitle");
+                if (!(tagsArray.length() == 0)){
+                    JSONObject tag = tagsArray.getJSONObject(0);
+                    String articleAuthor = tag.getString("webTitle");
+                    articles.add(new Article(sectionName, articleTitle, articlePublicationDate, webUrl, articleAuthor));
+                } else {
+                    articles.add(new Article(sectionName, articleTitle, articlePublicationDate, webUrl));
+                }
 
-                articles.add(new Article(sectionName, articleTitle, articlePublicationDate, webUrl, articleAuthor));
+
+
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);

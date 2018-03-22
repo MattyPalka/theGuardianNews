@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * URL for articles data from the Guardian API
      */
     private static final String GUARDIAN_URL_REQUEST =
-            "https://content.guardianapis.com/search?api-key=test&show-tags=contributor";
+            "https://content.guardianapis.com/search?";
 
     /**
      * Constant value for the earthquake loader ID. We can choose any integer.
@@ -153,12 +154,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Append query parameter and its value. For example, the `format=json`
+        uriBuilder.appendQueryParameter("api-key", "test");
         uriBuilder.appendQueryParameter("format", "json");
         uriBuilder.appendQueryParameter("order-by", orderBy);
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
 
         //check if any particular section is selected in order to sort articles
         if (!(sections.equals("all"))) {
             uriBuilder.appendQueryParameter("section", sections);
+            Log.e ("URL", uriBuilder.toString());
         }
 
         // Create new loader for given URL

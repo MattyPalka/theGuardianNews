@@ -19,7 +19,7 @@ public class Article {
     private String mArticleURL;
 
     // Author of the Article
-    private String mArticleAuthor;
+    private String mArticleAuthor = "";
 
     /**
      * Create a new Article object
@@ -36,6 +36,13 @@ public class Article {
         mArticleDate = articleDate;
         mArticleURL = articleURL;
         mArticleAuthor = articleAuthor;
+    }
+
+    public Article (String articleSection, String articleTitle, String articleDate, String articleURL){
+        mArticleSection = articleSection;
+        mArticleTitle = articleTitle;
+        mArticleDate = articleDate;
+        mArticleURL = articleURL;
     }
 
     // returns the section of the article
