@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,10 +91,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 //Find the current article that was clicked on
                 Article currentArticle = mAdapter.getItem(i);
 
-                Uri articleUri = Uri.parse(currentArticle.getArticleURL());
+                Intent websiteIntent = new Intent(getApplicationContext(), ArticleViewActivity.class);
+                websiteIntent.putExtra("articleURL", currentArticle.getArticleURL());
+                websiteIntent.putExtra("articleTitle", currentArticle.getArticleTitle());
+                startActivity(websiteIntent);
+
+                /*Uri articleUri = Uri.parse(currentArticle.getArticleURL());
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW, articleUri);
                 //Send intent to launch new activity
-                startActivity(websiteIntent);
+                startActivity(websiteIntent);*/
             }
         });
 
@@ -162,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //check if any particular section is selected in order to sort articles
         if (!(sections.equals("all"))) {
             uriBuilder.appendQueryParameter("section", sections);
-            Log.e ("URL", uriBuilder.toString());
         }
 
         // Create new loader for given URL
@@ -189,6 +192,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<List<Article>> loader) {
         mAdapter.clear();
     }
-
 }
 

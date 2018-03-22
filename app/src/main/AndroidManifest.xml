@@ -24,6 +24,9 @@
             android:label="@string/settings_title"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ArticleViewActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
